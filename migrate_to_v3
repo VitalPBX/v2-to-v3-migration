@@ -18,6 +18,10 @@ echo "Installing VitalPBX 3"
 rm -rf /etc/yum.repos.d/vitalpbx.repo
 wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpbx-3/resources/vitalpbx.repo
 
+#Update the IonCube and PHP first
+yum update php -y
+yum update ioncube-loader -y
+systemctl reload-or-restart httpd
 
 #Clean Yum Cache and do another full update
 yum clean all
