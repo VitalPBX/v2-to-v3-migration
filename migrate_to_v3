@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+echo "Updating Packages"
+#Clean Yum Cache
+yum clean all
+rm -rf /var/cache/yum
+
+#Download the latest VitalPBX's repo of Version 2
+rm -rf /etc/yum.repos.d/vitalpbx.repo
+wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/VPS/master/resources/vitalpbx.repo
+
+#Do a full update
+yum -y update
+
+echo "Installing VitalPBX 3"
+#Download the latest VitalPBX's repo of Version 3
+rm -rf /etc/yum.repos.d/vitalpbx.repo
+wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpbx-3/resources/vitalpbx.repo
+
+
+#Clean Yum Cache and do another full update
+yum clean all
+rm -rf /var/cache/yum
+yum -y update
+
+#Remove the system
+echo "Rebooting System"
+reboot
