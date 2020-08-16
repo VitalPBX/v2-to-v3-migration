@@ -29,7 +29,9 @@ systemctl enable mariadb
 rm -rf /etc/my.cnf.d/ombutel.cnf
 rm -rf /etc/my.cnf.d/vitalpbx.cnf
 wget -P /etc/my.cnf.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpbx-3/resources/vitalpbx.cnf
-systemctl restart mariadb
+systemctl restart mariadb > /dev/null 2>&1
+systemctl restart mariadb > /dev/null 2>&1
+mysql_upgrade
 
 #Clean Yum Cache and do another full update
 yum clean all
