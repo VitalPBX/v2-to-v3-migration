@@ -8,39 +8,53 @@ rm -rf /var/cache/yum
 
 #Download the latest VitalPBX's repo of Version 2
 rm -rf /etc/yum.repos.d/vitalpbx.repo
-wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/VPS/master/resources/vitalpbx.repo
+wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/v2-to-v3-migration/master/resources/vitalpbx.repo
 
 #Do a full update
-yum -y update
+yum update vitalpbx -y
+
+echo "Update MariaDB"
+rm -rf /etc/yum.repos.d/mariadb.repo
+wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/v2-to-v3-migration/master/resources/mariadb.repo
+
+# Clean Cache
+yum clean all
+rm -rf /var/cache/yum
+
+rm -rf /etc/my.cnf.d/ombutel.cnf
+rm -rf /etc/my.cnf.d/vitalpbx.cnf
+wget -P /etc/my.cnf.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpbx-3/resources/vitalpbx.cnf
+
+systemctl stop asterisk
+systemctl stop mariadb
+yum install MariaDB-server MariaDB-client MariaDB-common MariaDB-compat -y
+systemctl enable mariadb
+systemctl start mariadb > /dev/null 2>&1
+mysql_upgrade
 
 echo "Installing VitalPBX 3"
 #Download the latest VitalPBX's repo of Version 3
 rm -rf /etc/yum.repos.d/vitalpbx.repo
 wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpbx-3/resources/vitalpbx.repo
 
+# Clean Cache
+yum clean all
+rm -rf /var/cache/yum
+
 #Update the IonCube and PHP first
 yum update ioncube-loader -y
 yum update php -y
 systemctl reload-or-restart httpd
-
-#Install MariaDB (MySQL)
-rm -rf /etc/my.cnf.d/ombutel.cnf
-rm -rf /etc/my.cnf.d/vitalpbx.cnf
-wget -P /etc/my.cnf.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpbx-3/resources/vitalpbx.cnf
-yum install MariaDB-server MariaDB-client MariaDB-common MariaDB-compat mariadb-connector-odbc -y
-systemctl enable mariadb
-systemctl restart mariadb
-mysql_upgrade
-
-#Clean cache
-yum clean all
-rm -rf /var/cache/yum
 
 #Update VitalPBX
 yum update vitalpbx -y
 
 #do a full update
 yum -y update
+
+# Force to start setup service before reboot to apply some additional changes
+rm -rf /var/lib/vitalpbx/dbsetup-done
+systemctl enable vpbx-setup
 
 #Remove the system
 echo "Rebooting System"
