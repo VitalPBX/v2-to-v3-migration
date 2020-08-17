@@ -1,0 +1,6 @@
+[mariadb]
+enabled = 1
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.4/centos/7/x86_64/
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
