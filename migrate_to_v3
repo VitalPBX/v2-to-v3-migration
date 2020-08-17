@@ -33,9 +33,14 @@ systemctl restart mariadb > /dev/null 2>&1
 systemctl restart mariadb > /dev/null 2>&1
 mysql_upgrade
 
-#Clean Yum Cache and do another full update
+#Clean cache
 yum clean all
 rm -rf /var/cache/yum
+
+#Update VitalPBX
+yum update vitalpbx -y
+
+#do a full update
 yum -y update
 
 #Remove the system
