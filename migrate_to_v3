@@ -29,8 +29,7 @@ rm -rf /etc/my.cnf.d/vitalpbx.cnf
 wget -P /etc/my.cnf.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpbx-3/resources/vitalpbx.cnf
 yum install MariaDB-server MariaDB-client MariaDB-common MariaDB-compat mariadb-connector-odbc -y
 systemctl enable mariadb
-systemctl restart mariadb > /dev/null 2>&1
-systemctl restart mariadb > /dev/null 2>&1
+systemctl restart mariadb
 mysql_upgrade
 
 #Clean cache
