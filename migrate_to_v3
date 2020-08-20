@@ -13,6 +13,15 @@ wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/v2-to-v3-mi
 #Do a full update
 yum update vitalpbx -y
 
+# Handle incompatibility issue with old Sonata Recordings
+INSTALL_SR=no
+if rpm -qa | grep sonata-recordings  2>&1 > /dev/null; then
+  INSTALL_SR=yes
+fi
+
+# Remove this package because generates conflicts with php-mysqlnd. This will uninstall sonata recordings package also
+yum remove php-mysql -y
+
 echo "Update MariaDB"
 rm -rf /etc/yum.repos.d/mariadb.repo
 wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/v2-to-v3-migration/master/resources/mariadb.repo
@@ -48,6 +57,11 @@ systemctl reload-or-restart httpd
 
 #Update VitalPBX
 yum update vitalpbx -y
+
+#Install Sonata Recordings if needed
+if [ $INSTALL_SR = "yes" ]; then
+  yum install sonata-recordings -y
+fi
 
 #do a full update
 yum -y update
