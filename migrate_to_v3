@@ -10,7 +10,7 @@ rm -rf /var/cache/yum
 rm -rf /etc/yum.repos.d/vitalpbx.repo
 wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/v2-to-v3-migration/master/resources/vitalpbx.repo
 
-#Do a full update
+#Do the VitalPBX update
 yum update vitalpbx -y
 
 # Handle incompatibility issue with old Sonata Recordings
@@ -65,6 +65,21 @@ fi
 
 #do a full update
 yum -y update
+
+#Reinstall the VitalPBX add-ons
+CORE=("vitalpbx" "vitalpbx-asterisk-configs" "vitalpbx-monitor" "vitalpbx-sounds" "vitalpbx-sounds-es" "vitalpbx-themes", "vitalpbx-fail2ban-config", "vitalpbx-geo-firewall")
+rm -f /tmp/addons.txt
+touch /tmp/addons.txt
+rpm -qa --qf "%{NAME}\n" | grep vitalpbx | while read -r package ; do
+   if [[ ! " ${CORE[@]} " =~ " ${package} " ]]; then
+     echo ${package} >> /tmp/addons.txt
+   fi
+done
+
+# If there are any add-on installed then reinstall them
+if [ -s /tmp/addons.txt ]; then
+  yum -y reinstall $(cat /tmp/addons.txt)
+fi
 
 # Force to start setup service before reboot to apply some additional changes
 rm -rf /var/lib/vitalpbx/dbsetup-done
