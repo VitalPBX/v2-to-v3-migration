@@ -41,6 +41,9 @@ systemctl enable mariadb
 systemctl start mariadb > /dev/null 2>&1
 mysql_upgrade
 
+# Delete old baseplan before migrating
+rm -rf /etc/asterisk/ombutel/extensions__20-baseplan.conf
+
 echo "Installing VitalPBX 3"
 #Download the latest VitalPBX's repo of Version 3
 rm -rf /etc/yum.repos.d/vitalpbx.repo
