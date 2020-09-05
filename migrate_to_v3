@@ -73,7 +73,7 @@ yum -y update
 rm -rf /etc/asterisk/ombutel
 
 #Reinstall the VitalPBX add-ons
-CORE=("vitalpbx" "vitalpbx-asterisk-configs" "vitalpbx-monitor" "vitalpbx-sounds" "vitalpbx-sounds-es" "vitalpbx-themes", "vitalpbx-fail2ban-config", "vitalpbx-geo-firewall")
+CORE=("vitalpbx" "vitalpbx-asterisk-configs" "vitalpbx-monitor" "vitalpbx-sounds" "vitalpbx-sounds-es" "vitalpbx-themes" "vitalpbx-fail2ban-config" "vitalpbx-geo-firewall")
 rm -f /tmp/addons.txt
 touch /tmp/addons.txt
 rpm -qa --qf "%{NAME}\n" | grep vitalpbx | while read -r package ; do
