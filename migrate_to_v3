@@ -58,6 +58,12 @@ yum update ioncube-loader -y
 yum update php -y
 systemctl reload-or-restart httpd
 
+#stop some services before updating
+systemctl stop crond.service > /dev/null 2>&1
+systemctl stop switchboard.service > /dev/null 2>&1
+systemctl stop vpbx-monitor.service > /dev/null 2>&1
+systemctl stop recordings.service > /dev/null 2>&1
+
 #Update VitalPBX
 yum update vitalpbx -y
 
