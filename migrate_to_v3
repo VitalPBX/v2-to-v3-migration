@@ -64,6 +64,28 @@ systemctl stop vpbx-monitor.service || :
 systemctl stop recordings.service || :
 systemctl stop firewalld.service || :
 
+#Backup Main Configurations
+mkdir -p /etc/asterisk/vitalpbx
+mkdir -p /usr/share/vitalpbx
+mkdir -p /var/lib/vitalpbx
+mkdir -p /etc/asterisk/vitalpbx
+mkdir -p /usr/share/ombutel/certificates
+
+cp -a /usr/share/ombutel/{certificates,scripts} /usr/share/vitalpbx/
+rm -rf /usr/share/ombutel
+
+cp -a /var/lib/ombutel/* /var/lib/vitalpbx/
+rm -rf /var/lib/ombutel
+
+cp -a /etc/asterisk/ombutel/* /etc/asterisk/vitalpbx/
+rm -rf /etc/asterisk/ombutel
+
+rm -f /etc/asterisk/vitalpbx/extensions__20-baseplan.conf
+
+chown apache:root /etc/asterisk/vitalpbx
+chown apache:root /etc/asterisk/vitalpbx
+chown apache:apache /var/lib/vitalpbx
+
 #Update VitalPBX
 yum update vitalpbx -y || :
 
