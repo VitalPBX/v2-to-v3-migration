@@ -86,6 +86,9 @@ chown apache:root /etc/asterisk/vitalpbx
 chown apache:root /etc/asterisk/vitalpbx
 chown apache:apache /var/lib/vitalpbx
 
+#Disable firewall update during the migration
+touch /var/lib/vitalpbx/on-migration
+
 #Update VitalPBX
 yum update vitalpbx -y || :
 
@@ -118,6 +121,9 @@ fi
 # Force to start setup service before reboot to apply some additional changes
 rm -rf /var/lib/vitalpbx/dbsetup-done
 systemctl enable vpbx-setup
+
+#Enable Firewall Updating Before Reboot
+rm -f /var/lib/vitalpbx/on-migration
 
 #Remove the system
 echo "Rebooting System"
