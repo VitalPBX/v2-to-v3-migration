@@ -53,10 +53,6 @@ wget -P /etc/yum.repos.d/ https://raw.githubusercontent.com/VitalPBX/VPS/vitalpb
 yum clean all
 rm -rf /var/cache/yum
 
-#Update the IonCube and PHP first
-yum update ioncube-loader php -y || :
-systemctl reload-or-restart httpd > /dev/null 2>&1
-
 #stop some services before updating
 systemctl stop crond.service || :
 systemctl stop switchboard.service || :
@@ -82,6 +78,11 @@ rm -rf /etc/asterisk/ombutel
 
 rm -f /etc/asterisk/vitalpbx/extensions__20-baseplan.conf
 
+#Update the IonCube and PHP first
+yum update ioncube-loader php -y || :
+systemctl reload-or-restart httpd > /dev/null 2>&1
+
+# Set Some Permissions
 chown apache:root /etc/asterisk/vitalpbx
 chown apache:root /etc/asterisk/vitalpbx
 chown apache:apache /var/lib/vitalpbx
